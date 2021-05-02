@@ -9,10 +9,10 @@ Poppler_jll = "9c32591e-4766-534b-9725-b71a8799265b"
 Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
-julia = "1"
 LaTeXStrings = "1.1"
 Poppler_jll = "0.87"
 Requires = "1.0"
+julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

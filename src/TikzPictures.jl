@@ -2,8 +2,8 @@ module TikzPictures
 
 export TikzPicture, PDF, TEX, TIKZ, SVG, save, tikzDeleteIntermediate, tikzCommand, TikzDocument, push!
 import Base: push!
-import LaTeXStrings: LaTeXString, @L_str
-export LaTeXString, @L_str
+import LaTeXStrings: LaTeXString
+export LaTeXString
 
 _tikzDeleteIntermediate = true
 _tikzCommand = "lualatex"
@@ -13,11 +13,9 @@ mutable struct TikzPicture
     options::AbstractString
     preamble::AbstractString
     environment::AbstractString
-    width::AbstractString
-    height::AbstractString
-    keepAspectRatio::Bool
+    adjustboxOptions::AbstractString
     enableWrite18::Bool
-    TikzPicture(data::AbstractString; options="", preamble="", environment="tikzpicture", width="", height="", keepAspectRatio=true, enableWrite18=true) = new(data, options, preamble, environment, width, height, keepAspectRatio, enableWrite18)
+    TikzPicture(data::AbstractString; options="", preamble="", environment="tikzpicture", adjustboxOptions="", enableWrite18=true) = new(data, options, preamble, environment, adjustboxOptions, enableWrite18)
 end
 
 mutable struct TikzDocument
@@ -111,23 +109,9 @@ end
 
 extension(f::SaveType) = lowercase(split("$(typeof(f))",".")[end])
 
-resize(tp::TikzPicture) = !isempty(tp.width) || !isempty(tp.height)
+resize(tp::TikzPicture) = !isempty(tp.adjustboxOptions)
 
-function write_adjustbox_options(tex::IO, tp::TikzPicture)
-    adjustbox_options = []
-    if !isempty(tp.width)
-        push!(adjustbox_options, "width=$(tp.width)")
-    end
-    if !isempty(tp.height)
-        push!(adjustbox_options, "height=$(tp.height)")
-    end
-    if tp.keepAspectRatio
-        push!(adjustbox_options, "keepaspectratio")
-    end
-    adjustbox_option_string = join(adjustbox_options, ',')
-    println(tex, "\\begin{adjustbox}{$adjustbox_option_string}")
-end
-
+write_adjustbox_options(tex::IO, tp::TikzPicture) = println(tex, "\\begin{adjustbox}{$tp.adjustboxOptions}")
 
 showable(::MIME"image/svg+xml", tp::TikzPicture) = true
 
