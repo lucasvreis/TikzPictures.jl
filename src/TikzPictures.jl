@@ -111,7 +111,7 @@ extension(f::SaveType) = lowercase(split("$(typeof(f))",".")[end])
 
 resize(tp::TikzPicture) = !isempty(tp.adjustboxOptions)
 
-write_adjustbox_options(tex::IO, tp::TikzPicture) = println(tex, "\\begin{adjustbox}{$tp.adjustboxOptions}")
+write_adjustbox_options(tex::IO, tp::TikzPicture) = println(tex, "\\begin{adjustbox}{$(tp.adjustboxOptions)}")
 
 showable(::MIME"image/svg+xml", tp::TikzPicture) = true
 
